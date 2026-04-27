@@ -1,0 +1,8 @@
+id,category,name,base_hp,base_atk,base_spd,xp_value,spawn_weight,scaling_factor,image_ref
+char_jax,player,Jax,1,1,10,0,0,0,images/jax_sprite.png
+char_nova,player,Nova,80,25,160,0,0,0,images/nova_sprite.png
+en_scrapling,enemy,Scrapling,10,10,40,1,80,0.15,images/scrapling.png
+en_hound,enemy,Chrome-Hound,35,15,90,3,20,0.2,images/hound.png
+en_gargantua,enemy,Junk-Gargantua,800,30,25,50,1,0.5,images/gargantua.png
+sys_spawn_rate,system,Base Spawn Delay,0,0,1000,0,0,-80,MISSING_IMAGE
+sys_max_enemies,system,Base Max Enemies,30,0,0,0,0,15,MISSING_IMAGE

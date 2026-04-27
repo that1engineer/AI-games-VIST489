@@ -1,0 +1,10 @@
+{
+  "images/portraits/": "Player character portraits (48x48)",
+  "images/sprites/": "Main game sprites for player and enemies (32-48px)",
+  "images/icons/weapons/": "Weapon ability icons (32x32)",
+  "images/icons/items/": "Artifact and pickup icons (32x32)",
+  "images/icons/enemies/": "Enemy minimap / HUD icons",
+  "images/sprites/enemies/": "Enemy sprites used in game (32x32)",
+  "images/sprites/pickups/": "XP orbs and other collectibles",
+  "images/icons/ui/": "UI elements like level-up button"
+}

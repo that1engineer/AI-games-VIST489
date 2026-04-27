@@ -1,0 +1,6 @@
+id,name,image_portrait,image_sprite,image_icon,type,hp,atk,def,effect,notes
+misc_player_projectile,Player Projectile,MISSING_IMAGE,images/projectile_sprite.png,images/projectile_icon.png,projectile,1,8,0,hit_enemy,Generic bullet fallback
+misc_burn_field,Burn Field,MISSING_IMAGE,images/burn_field_sprite.png,images/burn_field_icon.png,hazard,1,3,0,damage_over_time,Created by burn attacks
+misc_level_card,Level Up Card,MISSING_IMAGE,MISSING_IMAGE,images/level_card_icon.png,ui,0,0,0,choose_upgrade,Upgrade selection UI
+misc_damage_number,Damage Number,MISSING_IMAGE,MISSING_IMAGE,MISSING_IMAGE,ui,0,0,0,show_feedback,Uses generated text not image
+misc_spawn_marker,Spawn Marker,MISSING_IMAGE,images/spawn_marker_sprite.png,images/spawn_marker_icon.png,warning,1,0,0,telegraph_spawn,Optional wave warning

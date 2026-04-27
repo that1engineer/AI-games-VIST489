@@ -1,0 +1,66 @@
+{
+  "images/jax_port.png": {
+    "caption": "Portrait of Jax, the Scrapyard Rookie",
+    "used_by": ["char_jax"]
+  },
+  "images/jax_sprite.png": {
+    "caption": "Top-down sprite for Jax",
+    "used_by": ["char_jax"]
+  },
+  "images/jax_icon.png": {
+    "caption": "UI icon for Jax",
+    "used_by": ["char_jax"]
+  },
+  "images/nova_port.png": {
+    "caption": "Portrait of Nova, the Demolitionist",
+    "used_by": ["char_nova"]
+  },
+  "images/nova_sprite.png": {
+    "caption": "Top-down sprite for Nova",
+    "used_by": ["char_nova"]
+  },
+  "images/nova_icon.png": {
+    "caption": "UI icon for Nova",
+    "used_by": ["char_nova"]
+  },
+  "images/scrapling.png": {
+    "caption": "Sprite of the Scrapling enemy",
+    "used_by": ["en_scrapling"]
+  },
+  "images/hound.png": {
+    "caption": "Sprite of the Chrome-Hound enemy",
+    "used_by": ["en_hound"]
+  },
+  "images/gargantua.png": {
+    "caption": "Sprite of the Junk-Gargantua elite",
+    "used_by": ["en_gargantua"]
+  },
+  "images/boots.png": {
+    "caption": "Icon for Kinetic Boots artifact",
+    "used_by": ["art_boots"]
+  },
+  "images/multitool.png": {
+    "caption": "Icon for Multitool artifact",
+    "used_by": ["art_multitool"]
+  },
+  "images/scrap.png": {
+    "caption": "Icon for Scrap XP pickup",
+    "used_by": ["loot_xp"]
+  },
+  "images/chest.png": {
+    "caption": "Icon for Treasure Chest pickup",
+    "used_by": ["loot_chest", "en_gargantua"]
+  },
+  "images/blaster.png": {
+    "caption": "Icon for Auto-Blaster weapon",
+    "used_by": ["wpn_blaster"]
+  },
+  "images/mortar.png": {
+    "caption": "Icon for Frag Mortar weapon",
+    "used_by": ["wpn_mortar"]
+  },
+  "images/plasma.png": {
+    "caption": "Icon for Plasma Ring weapon",
+    "used_by": ["wpn_plasma"]
+  }
+}

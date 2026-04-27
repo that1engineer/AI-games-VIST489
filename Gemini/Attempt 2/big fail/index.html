@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrap-Iron Survivors</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="ui-layer">
+            <div class="bar-bg"><div id="xp-bar"></div></div>
+            <div class="stats">
+                <span id="ui-level">Level: 1</span>
+                <span id="ui-time">00:00</span>
+                <span id="ui-kills">Kills: 0</span>
+            </div>
+        </div>
+
+        <div id="menu-start" class="overlay active">
+            <h1>Scrap-Iron Survivors</h1>
+            <p id="loading-text">Loading game data...</p>
+            <div id="char-select" style="display: none;">
+                <button onclick="startGame('char_jax')">PLAY AS JAX</button>
+                <button onclick="startGame('char_nova')">PLAY AS NOVA</button>
+            </div>
+        </div>
+
+        <div id="menu-gameover" class="overlay">
+            <h1 class="danger-text">SYSTEM FAILURE</h1>
+            <p id="final-stats"></p>
+            <button onclick="location.reload()">REBOOT</button>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

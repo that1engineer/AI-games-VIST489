@@ -1,0 +1,17 @@
+category,id,name,base_hp,base_speed,base_damage,attack_rate,projectile_count,spawn_weight,scaling_hp,scaling_speed,scaling_spawn,ai_behavior,image_sprite,image_icon,starting_for,passive,notes
+player,nocturne,Nocturne,100,3.2,11,1.4,3,0,1,1,1,simple,images/sprites/nocturne.png,images/icons/nocturne_icon.png,nocturne,+15% move speed,Shadow wanderer starter
+player,sanguine,Sanguine,110,2.9,14,0.9,1,0,1,1,1,simple,images/sprites/sanguine.png,images/icons/sanguine_icon.png,sanguine,+10% dmg on low HP,
+player,lunar,Lunar,95,3,11,2,2,0,1,1,1,simple,images/sprites/lunar.png,images/icons/lunar_icon.png,lunar,+20% area size,
+player,thornheart,Thornheart,120,2.7,7,0.8,1,0,1,1,1,simple,images/sprites/thornheart.png,images/icons/thornheart_icon.png,thornheart,15% slow aura,
+player,eclipse,Eclipse,105,3.1,18,0.6,1,0,1,1,1,simple,images/sprites/eclipse.png,images/icons/eclipse_icon.png,eclipse,+1 proj every 5 lvls,
+player,vesper,Vesper,100,2.8,10,1.5,2,0,1,1,1,simple,images/sprites/vesper.png,images/icons/vesper_icon.png,vesper,+8% XP gain,
+enemy,shadowling,Shadowling,15,1.6,8,0,0,40,1.18,1,1.22,simple_chase,images/sprites/enemies/shadowling.png,images/icons/enemies/shadowling.png,,,
+enemy,blight_bat,Blight Bat,9,2.4,6,0,0,30,1.08,1.08,1.15,arc_dive,images/sprites/enemies/blight_bat.png,images/icons/enemies/blight_bat.png,,,
+enemy,rootfiend,Rootfiend,32,0.9,12,0,0,20,1.15,1,1.1,leave_slow_trail,images/sprites/enemies/rootfiend.png,images/icons/enemies/rootfiend.png,,,
+enemy,howler,Howler,18,1.5,9,0,0,10,1.1,1.05,1.12,buff_nearby,images/sprites/enemies/howler.png,images/icons/enemies/howler.png,,,
+enemy,venom_wisp,Venom Wisp,10,1.8,5,0,0,20,1.12,1.1,1.2,leave_poison,images/sprites/enemies/venom_wisp.png,images/icons/enemies/venom_wisp.png,,,
+enemy,bone_stalker,Bone Stalker,22,1.9,10,0,0,12,1.18,1,1.15,straight_charge,images/sprites/enemies/bone_stalker.png,images/icons/enemies/bone_stalker.png,,,
+enemy,gloom_spider,Gloom Spider,14,1.4,7,0,0,8,1.12,1,1.1,shoot_web,images/sprites/enemies/gloom_spider.png,images/icons/enemies/gloom_spider.png,,,
+enemy,flesh_golem,Flesh Golem,60,1,15,0,0,5,1.25,1,1.08,split,images/sprites/enemies/flesh_golem.png,images/icons/enemies/flesh_golem.png,,,
+enemy,nightmare_herald,Nightmare Herald,45,1.3,12,0,0,3,1.3,1.05,1.25,summon,images/sprites/enemies/nightmare_herald.png,images/icons/enemies/nightmare_herald.png,,,
+enemy,bloodreaver,Bloodreaver,300,1.1,25,0,0,2,1.4,1,1.3,boss_pull,images/sprites/enemies/bloodreaver.png,images/icons/enemies/bloodreaver.png,,,

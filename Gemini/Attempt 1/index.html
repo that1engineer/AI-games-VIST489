@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrap-Iron Survivors - Prototype</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #111;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+        #game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+        canvas {
+            display: block;
+            background-color: #222;
+        }
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            display: none; /* Hidden by default */
+        }
+        .overlay.active { display: flex; }
+        h1 { color: #0ff; text-shadow: 0 0 10px #0ff; margin-bottom: 10px; }
+        button {
+            background: #222; border: 2px solid #0ff; color: #0ff;
+            padding: 15px 30px; margin: 10px; font-size: 18px; font-weight: bold;
+            cursor: pointer; transition: 0.2s;
+            font-family: inherit;
+        }
+        button:hover { background: #0ff; color: #000; }
+        .card-container { display: flex; gap: 20px; }
+        .card {
+            background: #333; border: 2px solid #0f0; color: #fff;
+            padding: 20px; width: 150px; text-align: center;
+            cursor: pointer; border-radius: 8px;
+        }
+        .card:hover { background: #0f0; color: #000; }
+        #ui-layer {
+            position: absolute; top: 10px; left: 10px; right: 10px;
+            pointer-events: none;
+        }
+        .bar-bg { background: #555; width: 100%; height: 15px; border-radius: 5px; overflow: hidden; margin-bottom: 5px;}
+        #xp-bar { background: #0ff; width: 0%; height: 100%; transition: width 0.2s; }
+        .stats { display: flex; justify-content: space-between; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    
+    <div id="ui-layer">
+        <div class="bar-bg"><div id="xp-bar"></div></div>
+        <div class="stats">
+            <span id="ui-level">Level: 1</span>
+            <span id="ui-time">00:00</span>
+            <span id="ui-kills">Kills: 0</span>
+        </div>
+    </div>
+
+    <div id="menu-start" class="overlay active">
+        <h1>Scrap-Iron Survivors</h1>
+        <p>WASD or Arrows to Move. Auto-fire.</p>
+        <button onclick="startGame()">START RUN</button>
+    </div>
+
+    <div id="menu-levelup" class="overlay">
+        <h1>SYSTEM UPGRADE</h1>
+        <div class="card-container" id="upgrade-cards">
+            </div>
+    </div>
+
+    <div id="menu-gameover" class="overlay">
+        <h1 style="color: #f00; text-shadow: 0 0 10px #f00;">SYSTEM FAILURE</h1>
+        <p id="final-stats">You survived for 00:00</p>
+        <button onclick="location.reload()">REBOOT</button>
+    </div>
+</div>
+
+<script>
+/** @type {HTMLCanvasElement} */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// --- GAME STATE ---
+let gameState = 'MENU'; // MENU, PLAYING, LEVELUP, GAMEOVER
+let lastTime = 0;
+let gameTime = 0;
+let kills = 0;
+const keys = {};
+
+// --- ENTITIES ---
+const player = {
+    x: 400, y: 300, size: 16, speed: 180, hp: 100, maxHp: 100,
+    xp: 0, xpNeeded: 10, level: 1, pickupRadius: 80,
+    stats: { damageMult: 1, projMult: 1, speedMult: 1 }
+};
+
+let enemies = [];
+let bullets = [];
+let pickups = [];
+let damageTexts = [];
+
+// --- WEAPONS ---
+const weapons = [
+    {
+        name: "Auto-Blaster", active: true, level: 1,
+        timer: 0, cooldown: 0.8, damage: 15, speed: 400, pierce: 0, color: '#0ff'
+    },
+    {
+        name: "Plasma Ring", active: false, level: 0,
+        timer: 0, cooldown: 3.0, damage: 10, radius: 0, maxRadius: 100, duration: 0.5, color: '#f0f'
+    }
+];
+
+// --- INPUT ---
+window.addEventListener('keydown', e => keys[e.code] = true);
+window.addEventListener('keyup', e => keys[e.code] = false);
+
+// --- CORE FUNCTIONS ---
+function startGame() {
+    document.getElementById('menu-start').classList.remove('active');
+    gameState = 'PLAYING';
+    lastTime = performance.now();
+    requestAnimationFrame(gameLoop);
+}
+
+function formatTime(seconds) {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+}
+
+function updateUI() {
+    document.getElementById('ui-level').innerText = `Level: ${player.level}`;
+    document.getElementById('ui-time').innerText = formatTime(gameTime);
+    document.getElementById('ui-kills').innerText = `Kills: ${kills}`;
+    document.getElementById('xp-bar').style.width = `${(player.xp / player.xpNeeded) * 100}%`;
+}
+
+function getClosestEnemy() {
+    let closest = null;
+    let minDist = Infinity;
+    enemies.forEach(e => {
+        const dist = Math.hypot(player.x - e.x, player.y - e.y);
+        if (dist < minDist) { minDist = dist; closest = e; }
+    });
+    return closest;
+}
+
+function fireWeapons(dt) {
+    weapons.forEach(wpn => {
+        if (!wpn.active) return;
+        wpn.timer -= dt;
+        
+        if (wpn.timer <= 0) {
+            if (wpn.name === "Auto-Blaster") {
+                const target = getClosestEnemy();
+                if (target) {
+                    const angle = Math.atan2(target.y - player.y, target.x - player.x);
+                    bullets.push({
+                        x: player.x, y: player.y,
+                        vx: Math.cos(angle) * wpn.speed, vy: Math.sin(angle) * wpn.speed,
+                        damage: wpn.damage * player.stats.damageMult, pierce: wpn.pierce,
+                        life: 2.0, color: wpn.color, size: 4
+                    });
+                }
+            } else if (wpn.name === "Plasma Ring") {
+                // Expanding AoE logic handled in main loop for simplicity
+                bullets.push({
+                    type: 'aura', x: player.x, y: player.y,
+                    damage: wpn.damage * player.stats.damageMult,
+                    currentRadius: 10, maxRadius: wpn.maxRadius, 
+                    life: wpn.duration, maxLife: wpn.duration, color: wpn.color
+                });
+            }
+            wpn.timer = wpn.cooldown;
+        }
+    });
+}
+
+function spawnEnemy(minutes) {
+    // Scaling formulas from GDD
+    const hpMult = 1 + (0.15 * minutes) + (0.05 * minutes * minutes);
+    const isRustMite = Math.random() > 0.7;
+    
+    // Spawn just outside the canvas
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 500;
+    
+    enemies.push({
+        x: player.x + Math.cos(angle) * dist,
+        y: player.y + Math.sin(angle) * dist,
+        hp: (isRustMite ? 5 : 10) * hpMult,
+        maxHp: (isRustMite ? 5 : 10) * hpMult,
+        speed: isRustMite ? 90 : 50,
+        size: isRustMite ? 8 : 12,
+        color: isRustMite ? '#f90' : '#f00',
+        damage: 10
+    });
+}
+
+function gainXP(amount) {
+    player.xp += amount;
+    if (player.xp >= player.xpNeeded) {
+        player.xp -= player.xpNeeded;
+        player.level++;
+        player.xpNeeded = Math.floor(player.xpNeeded * 1.5);
+        triggerLevelUp();
+    }
+}
+
+function triggerLevelUp() {
+    gameState = 'LEVELUP';
+    const menu = document.getElementById('menu-levelup');
+    const container = document.getElementById('upgrade-cards');
+    container.innerHTML = '';
+    menu.classList.add('active');
+
+    // Hardcoded simple upgrades for prototype
+    const upgrades = [
+        { title: "Blaster DMG +", desc: "Auto-Blaster deals more damage.", action: () => weapons[0].damage += 5 },
+        { title: "Unlock Plasma", desc: "Periodic Area of Effect.", action: () => { weapons[1].active = true; weapons[1].level++; weapons[1].maxRadius += 20; } },
+        { title: "Kinetic Boots", desc: "+10% Move Speed", action: () => player.stats.speedMult += 0.1 }
+    ];
+
+    upgrades.forEach(upg => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h3>${upg.title}</h3><p>${upg.desc}</p>`;
+        card.onclick = () => {
+            upg.action();
+            menu.classList.remove('active');
+            gameState = 'PLAYING';
+            lastTime = performance.now(); // Prevent time jump
+            requestAnimationFrame(gameLoop);
+        };
+        container.appendChild(card);
+    });
+}
+
+function triggerGameOver() {
+    gameState = 'GAMEOVER';
+    document.getElementById('final-stats').innerText = `Survived: ${formatTime(gameTime)} | Kills: ${kills} | Level: ${player.level}`;
+    document.getElementById('menu-gameover').classList.add('active');
+}
+
+// --- MAIN LOOP ---
+function update(dt) {
+    gameTime += dt;
+    const timeInMins = gameTime / 60;
+
+    // Player Movement
+    let dx = 0, dy = 0;
+    if (keys['KeyW'] || keys['ArrowUp']) dy -= 1;
+    if (keys['KeyS'] || keys['ArrowDown']) dy += 1;
+    if (keys['KeyA'] || keys['ArrowLeft']) dx -= 1;
+    if (keys['KeyD'] || keys['ArrowRight']) dx += 1;
+    
+    if (dx !== 0 || dy !== 0) {
+        const len = Math.hypot(dx, dy);
+        player.x += (dx / len) * (player.speed * player.stats.speedMult) * dt;
+        player.y += (dy / len) * (player.speed * player.stats.speedMult) * dt;
+    }
+
+    // Keep player in bounds (optional, but good for proto)
+    player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
+    player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
+
+    // Spawning
+    const maxEnemies = 30 + (15 * timeInMins);
+    if (enemies.length < maxEnemies && Math.random() < 0.1) spawnEnemy(timeInMins);
+
+    // Weapons
+    fireWeapons(dt);
+
+    // Pickups
+    for (let i = pickups.length - 1; i >= 0; i--) {
+        const p = pickups[i];
+        const dist = Math.hypot(player.x - p.x, player.y - p.y);
+        if (dist < player.pickupRadius) {
+            // Magnet pull
+            p.x += (player.x - p.x) * 5 * dt;
+            p.y += (player.y - p.y) * 5 * dt;
+            if (dist < player.size + 5) {
+                gainXP(1);
+                pickups.splice(i, 1);
+            }
+        }
+    }
+
+    // Bullets & Collision
+    for (let i = bullets.length - 1; i >= 0; i--) {
+        const b = bullets[i];
+        b.life -= dt;
+        if (b.life <= 0) { bullets.splice(i, 1); continue; }
+
+        if (b.type === 'aura') {
+            b.x = player.x; b.y = player.y; // Follow player
+            b.currentRadius = (1 - (b.life / b.maxLife)) * b.maxRadius;
+            
+            // Damage enemies in radius (throttle to avoid multi-hitting every frame)
+            enemies.forEach(e => {
+                if (Math.hypot(b.x - e.x, b.y - e.y) < b.currentRadius + e.size) {
+                    if (!e.hitBy) e.hitBy = [];
+                    if (!e.hitBy.includes(b)) {
+                        e.hp -= b.damage;
+                        e.hitBy.push(b);
+                        damageTexts.push({ x: e.x, y: e.y, text: Math.floor(b.damage), life: 0.5 });
+                    }
+                }
+            });
+        } else {
+            b.x += b.vx * dt; b.y += b.vy * dt;
+            let hit = false;
+            for (let j = enemies.length - 1; j >= 0; j--) {
+                const e = enemies[j];
+                if (Math.hypot(b.x - e.x, b.y - e.y) < e.size + b.size) {
+                    e.hp -= b.damage;
+                    damageTexts.push({ x: e.x, y: e.y, text: Math.floor(b.damage), life: 0.5 });
+                    if (b.pierce > 0) b.pierce--; else hit = true;
+                    break; // Hit one enemy per frame
+                }
+            }
+            if (hit) { bullets.splice(i, 1); continue; }
+        }
+    }
+
+    // Enemies
+    for (let i = enemies.length - 1; i >= 0; i--) {
+        const e = enemies[i];
+        if (e.hp <= 0) {
+            pickups.push({ x: e.x, y: e.y });
+            enemies.splice(i, 1);
+            kills++;
+            continue;
+        }
+
+        // Move to player
+        const distToPlayer = Math.hypot(player.x - e.x, player.y - e.y);
+        e.x += ((player.x - e.x) / distToPlayer) * e.speed * dt;
+        e.y += ((player.y - e.y) / distToPlayer) * e.speed * dt;
+
+        // Player takes damage
+        if (distToPlayer < player.size + e.size) {
+            player.hp -= e.damage * dt; // Continuous damage
+            if (player.hp <= 0) triggerGameOver();
+        }
+    }
+
+    // Damage Texts
+    for (let i = damageTexts.length - 1; i >= 0; i--) {
+        damageTexts[i].life -= dt;
+        damageTexts[i].y -= 20 * dt; // Float up
+        if (damageTexts[i].life <= 0) damageTexts.splice(i, 1);
+    }
+
+    updateUI();
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw Grid (Floor)
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1;
+    for(let i = 0; i < canvas.width; i+=50) {
+        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
+    }
+
+    // Pickups (Scrap)
+    ctx.fillStyle = '#0f0';
+    pickups.forEach(p => {
+        ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2); ctx.fill();
+    });
+
+    // Enemies
+    enemies.forEach(e => {
+        ctx.fillStyle = e.color;
+        ctx.beginPath(); ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2); ctx.fill();
+        // Mini HP bar
+        ctx.fillStyle = 'red'; ctx.fillRect(e.x - 10, e.y - e.size - 6, 20, 3);
+        ctx.fillStyle = 'lime'; ctx.fillRect(e.x - 10, e.y - e.size - 6, 20 * (e.hp / e.maxHp), 3);
+    });
+
+    // Bullets & Auras
+    bullets.forEach(b => {
+        if (b.type === 'aura') {
+            ctx.strokeStyle = b.color; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.arc(b.x, b.y, b.currentRadius, 0, Math.PI*2); ctx.stroke();
+        } else {
+            ctx.fillStyle = b.color;
+            ctx.beginPath(); ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2); ctx.fill();
+        }
+    });
+
+    // Player
+    ctx.fillStyle = '#0ff';
+    ctx.beginPath(); ctx.arc(player.x, player.y, player.size, 0, Math.PI * 2); ctx.fill();
+    // Player HP
+    ctx.fillStyle = 'red'; ctx.fillRect(player.x - 15, player.y + 20, 30, 4);
+    ctx.fillStyle = 'lime'; ctx.fillRect(player.x - 15, player.y + 20, 30 * Math.max(0, player.hp / player.maxHp), 4);
+
+    // Magnet Radius (Debug/Visualizer)
+    ctx.strokeStyle = 'rgba(0, 255, 255, 0.1)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(player.x, player.y, player.pickupRadius, 0, Math.PI*2); ctx.stroke();
+
+    // Damage Texts
+    ctx.fillStyle = '#fff';
+    ctx.font = '12px Courier New';
+    damageTexts.forEach(t => {
+        ctx.globalAlpha = t.life / 0.5;
+        ctx.fillText(t.text, t.x, t.y);
+    });
+    ctx.globalAlpha = 1.0;
+}
+
+function gameLoop(timestamp) {
+    if (gameState !== 'PLAYING') return;
+    
+    const dt = (timestamp - lastTime) / 1000;
+    lastTime = timestamp;
+    
+    // Cap dt to prevent massive jumps if tab is backgrounded
+    if (dt < 0.1) {
+        update(dt);
+        draw();
+    }
+    
+    requestAnimationFrame(gameLoop);
+}
+</script>
+
+</body>
+</html>

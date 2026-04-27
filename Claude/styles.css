@@ -1,0 +1,357 @@
+/* Emberfall: Nightswarm — UI styles
+   Palette pulled from design doc §12 */
+
+:root {
+  --c-bg-0: #0d0a14;
+  --c-bg-1: #1c1a2b;
+  --c-bg-2: #3a2f4a;
+  --c-mauve: #6b4a7a;
+  --c-pink: #c98aab;
+  --c-cream: #f3d0a3;
+  --c-amber: #ffb84a;
+  --c-orange: #ff6b3d;
+  --c-red: #d63d2e;
+  --c-teal: #4ac1bd;
+  --c-deep-teal: #2d6e7e;
+  --c-deeper-teal: #1a3b4f;
+  --c-dark-green: #2a5a3d;
+  --c-green: #6fa86c;
+  --c-paper: #e8e3d6;
+  --c-white: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--c-bg-0);
+  color: var(--c-paper);
+  font-family: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+  font-size: 14px;
+  overflow: hidden;
+  user-select: none;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+#game {
+  display: block;
+  background: var(--c-bg-0);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  width: min(100vw, 100vh * 1.5);
+  height: min(100vh, 100vw / 1.5);
+  box-shadow: 0 0 0 2px var(--c-bg-2), 0 30px 80px rgba(0,0,0,0.6);
+}
+
+/* HUD ---------------------------------------------------------------- */
+.hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  width: min(100vw, 100vh * 1.5);
+  height: min(100vh, 100vw / 1.5);
+  margin: auto;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.hud > div {
+  position: absolute;
+  padding: 10px 14px;
+  background: rgba(13, 10, 20, 0.55);
+  border: 1px solid var(--c-bg-2);
+  border-radius: 4px;
+  backdrop-filter: blur(2px);
+}
+
+.hud-tl { top: 12px; left: 12px; min-width: 200px; }
+.hud-tc { top: 12px; left: 50%; transform: translateX(-50%); min-width: 280px; text-align: center; }
+.hud-tr { top: 12px; right: 12px; }
+.hud-bl { bottom: 12px; left: 12px; display: flex; gap: 14px; }
+.hud-br { bottom: 12px; right: 12px; padding: 6px !important; }
+
+.hp .hp-bar {
+  width: 200px;
+  height: 14px;
+  background: var(--c-bg-2);
+  border: 1px solid var(--c-mauve);
+  position: relative;
+  overflow: hidden;
+}
+.hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-red), var(--c-amber));
+  width: 100%;
+  transition: width 80ms linear;
+}
+.hp #hp-text {
+  display: block;
+  margin-top: 4px;
+  color: var(--c-cream);
+  font-size: 11px;
+}
+
+.meta-line {
+  margin-top: 6px;
+  color: var(--c-pink);
+}
+.meta-line .dot { color: var(--c-mauve); margin: 0 6px; }
+
+.xp-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--c-bg-2);
+  border: 1px solid var(--c-deep-teal);
+  position: relative;
+  overflow: hidden;
+}
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-teal), var(--c-cream));
+  width: 0%;
+  transition: width 100ms linear;
+}
+.lvl {
+  margin-top: 4px;
+  color: var(--c-cream);
+}
+
+.icon-row {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+}
+.icon-row.small { margin-top: 6px; }
+.icon-row .icon {
+  width: 28px; height: 28px;
+  background: var(--c-bg-1);
+  border: 1px solid var(--c-mauve);
+  position: relative;
+  display: grid; place-items: center;
+  font-size: 14px;
+  color: var(--c-amber);
+}
+.icon-row.small .icon {
+  width: 22px; height: 22px;
+  font-size: 12px;
+  border-color: var(--c-deep-teal);
+  color: var(--c-teal);
+}
+.icon .lvl-pip {
+  position: absolute;
+  bottom: -2px; right: -2px;
+  font-size: 9px;
+  background: var(--c-bg-0);
+  padding: 0 3px;
+  border: 1px solid var(--c-mauve);
+  color: var(--c-cream);
+}
+.icon.lvl-mid {
+  border-color: var(--c-amber);
+  color: var(--c-cream);
+  box-shadow: 0 0 4px rgba(255, 184, 74, 0.45);
+}
+.icon.lvl-high {
+  border-color: var(--c-orange);
+  color: var(--c-white);
+  box-shadow: 0 0 8px rgba(255, 107, 61, 0.7), inset 0 0 4px rgba(255, 184, 74, 0.35);
+}
+.icon.lvl-max {
+  border-color: var(--c-cream);
+  color: var(--c-white);
+  background: linear-gradient(135deg, var(--c-bg-1), var(--c-bg-2));
+  box-shadow:
+    0 0 10px rgba(255, 184, 74, 0.9),
+    0 0 18px rgba(255, 107, 61, 0.5),
+    inset 0 0 6px rgba(243, 208, 163, 0.5);
+  animation: lvl-max-pulse 1.6s ease-in-out infinite;
+}
+@keyframes lvl-max-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255,184,74,0.9), 0 0 18px rgba(255,107,61,0.5), inset 0 0 6px rgba(243,208,163,0.5); }
+  50%      { box-shadow: 0 0 14px rgba(255,184,74,1.0), 0 0 26px rgba(255,107,61,0.7), inset 0 0 8px rgba(243,208,163,0.7); }
+}
+.icon .cd-ring {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.55);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+#minimap {
+  display: block;
+  image-rendering: pixelated;
+  background: var(--c-bg-0);
+  border: 1px solid var(--c-bg-2);
+}
+
+/* Overlays ---------------------------------------------------------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  background: rgba(13, 10, 20, 0.78);
+  backdrop-filter: blur(3px);
+  z-index: 10;
+  text-align: center;
+  padding: 30px;
+}
+.overlay.hidden { display: none; }
+
+h1 {
+  font-size: 56px;
+  margin: 0 0 4px;
+  letter-spacing: 0.08em;
+  color: var(--c-amber);
+  text-shadow: 0 2px 0 var(--c-bg-2), 0 4px 24px rgba(255,184,74,0.4);
+}
+h1 .sub {
+  display: block;
+  font-size: 22px;
+  color: var(--c-pink);
+  letter-spacing: 0.14em;
+  margin-top: 4px;
+}
+h2 { font-size: 28px; color: var(--c-pink); margin: 0 0 16px; }
+h3 { font-size: 16px; color: var(--c-cream); margin: 12px 0 8px; }
+
+.tag {
+  color: var(--c-mauve);
+  margin: 0 0 24px;
+  font-style: italic;
+}
+
+.cards {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 880px;
+  margin-top: 12px;
+}
+.card {
+  width: 220px;
+  background: var(--c-bg-1);
+  border: 2px solid var(--c-mauve);
+  padding: 14px;
+  cursor: pointer;
+  text-align: left;
+  pointer-events: auto;
+  transition: transform 80ms ease, border-color 80ms ease, background 80ms ease;
+}
+.card:hover, .card.focused {
+  border-color: var(--c-amber);
+  background: var(--c-bg-2);
+  transform: translateY(-3px);
+}
+.card .card-name {
+  font-size: 14px;
+  color: var(--c-amber);
+  margin-bottom: 4px;
+}
+.card .card-tag {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--c-teal);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.card .card-desc {
+  font-size: 12px;
+  color: var(--c-paper);
+  line-height: 1.5;
+}
+.card .card-key {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  padding: 2px 6px;
+  border: 1px solid var(--c-mauve);
+  font-size: 11px;
+  color: var(--c-cream);
+}
+.card.rarity-C { border-color: var(--c-mauve); }
+.card.rarity-U { border-color: var(--c-teal); }
+.card.rarity-R { border-color: var(--c-amber); }
+.card.rarity-L { border-color: var(--c-orange); box-shadow: 0 0 12px rgba(255,107,61,0.4); }
+
+.card-title {
+  font-size: 22px;
+  color: var(--c-cream);
+  margin-bottom: 8px;
+}
+.hint {
+  margin-top: 18px;
+  color: var(--c-mauve);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+button {
+  pointer-events: auto;
+  background: var(--c-bg-2);
+  color: var(--c-cream);
+  border: 2px solid var(--c-mauve);
+  padding: 10px 22px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 6px;
+  letter-spacing: 0.06em;
+}
+button:hover { background: var(--c-mauve); color: var(--c-bg-0); }
+
+.meta-shop {
+  margin-top: 22px;
+  width: min(880px, 90vw);
+  border-top: 1px solid var(--c-bg-2);
+  padding-top: 14px;
+}
+#shard-balance {
+  color: var(--c-amber);
+  margin-left: 12px;
+  font-size: 13px;
+}
+.shop {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.shop .shop-item {
+  pointer-events: auto;
+  background: var(--c-bg-1);
+  border: 1px solid var(--c-deep-teal);
+  padding: 8px 10px;
+  cursor: pointer;
+  width: 200px;
+  text-align: left;
+  font-size: 11px;
+}
+.shop .shop-item:hover { border-color: var(--c-amber); }
+.shop .shop-item.maxed { opacity: 0.45; cursor: not-allowed; }
+.shop .shop-name { color: var(--c-cream); display: block; margin-bottom: 4px; }
+.shop .shop-stat { color: var(--c-teal); }
+.shop .shop-cost { color: var(--c-amber); float: right; }
+
+.end-stats {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 4px 24px;
+  margin: 0 auto 16px;
+  text-align: left;
+  color: var(--c-paper);
+  font-size: 13px;
+}
+.end-stats .k { color: var(--c-mauve); }
+
+/* Damage / float text uses canvas — no DOM */

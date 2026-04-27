@@ -1,0 +1,278 @@
+{
+  "images/mira_portrait.png": {
+    "caption": "Portrait of Mira Ashwake with lantern scout styling.",
+    "used_by": ["mira_ashwake"]
+  },
+  "images/mira_sprite.png": {
+    "caption": "Top-down playable sprite for Mira Ashwake.",
+    "used_by": ["mira_ashwake"]
+  },
+  "images/mira_icon.png": {
+    "caption": "Small UI icon for Mira Ashwake.",
+    "used_by": ["mira_ashwake"]
+  },
+  "images/bram_portrait.png": {
+    "caption": "Portrait of Bram Kettlewise with tinkerer gear.",
+    "used_by": ["bram_kettlewise"]
+  },
+  "images/bram_sprite.png": {
+    "caption": "Top-down playable sprite for Bram Kettlewise.",
+    "used_by": ["bram_kettlewise"]
+  },
+  "images/bram_icon.png": {
+    "caption": "Small UI icon for Bram Kettlewise.",
+    "used_by": ["bram_kettlewise"]
+  },
+  "images/sable_portrait.png": {
+    "caption": "Portrait of Sable Noon with clock thief theme.",
+    "used_by": ["sable_noon"]
+  },
+  "images/sable_sprite.png": {
+    "caption": "Top-down playable sprite for Sable Noon.",
+    "used_by": ["sable_noon"]
+  },
+  "images/sable_icon.png": {
+    "caption": "Small UI icon for Sable Noon.",
+    "used_by": ["sable_noon"]
+  },
+  "images/orrin_portrait.png": {
+    "caption": "Portrait of Orrin Vale with grave gardener theme.",
+    "used_by": ["orrin_vale"]
+  },
+  "images/orrin_sprite.png": {
+    "caption": "Top-down playable sprite for Orrin Vale.",
+    "used_by": ["orrin_vale"]
+  },
+  "images/orrin_icon.png": {
+    "caption": "Small UI icon for Orrin Vale.",
+    "used_by": ["orrin_vale"]
+  },
+  "images/nix_portrait.png": {
+    "caption": "Portrait of Nix Quill with ink mage styling.",
+    "used_by": ["nix_quill"]
+  },
+  "images/nix_sprite.png": {
+    "caption": "Top-down playable sprite for Nix Quill.",
+    "used_by": ["nix_quill"]
+  },
+  "images/nix_icon.png": {
+    "caption": "Small UI icon for Nix Quill.",
+    "used_by": ["nix_quill"]
+  },
+  "images/jun_portrait.png": {
+    "caption": "Portrait of Jun Glass with mirror duelist theme.",
+    "used_by": ["jun_glass"]
+  },
+  "images/jun_sprite.png": {
+    "caption": "Top-down playable sprite for Jun Glass.",
+    "used_by": ["jun_glass"]
+  },
+  "images/jun_icon.png": {
+    "caption": "Small UI icon for Jun Glass.",
+    "used_by": ["jun_glass"]
+  },
+  "images/murkling_portrait.png": {
+    "caption": "Portrait card art for Murkling enemy.",
+    "used_by": ["enemy_murkling"]
+  },
+  "images/murkling_sprite.png": {
+    "caption": "Small shadow chaser sprite for Murkling.",
+    "used_by": ["enemy_murkling"]
+  },
+  "images/murkling_icon.png": {
+    "caption": "Small UI icon for Murkling.",
+    "used_by": ["enemy_murkling"]
+  },
+  "images/needle_bat_portrait.png": {
+    "caption": "Portrait card art for Needle Bat enemy.",
+    "used_by": ["enemy_needle_bat"]
+  },
+  "images/needle_bat_sprite.png": {
+    "caption": "Fast bat enemy sprite.",
+    "used_by": ["enemy_needle_bat"]
+  },
+  "images/needle_bat_icon.png": {
+    "caption": "Small UI icon for Needle Bat.",
+    "used_by": ["enemy_needle_bat"]
+  },
+  "images/grave_slug_portrait.png": {
+    "caption": "Portrait card art for Grave Slug enemy.",
+    "used_by": ["enemy_grave_slug"]
+  },
+  "images/grave_slug_sprite.png": {
+    "caption": "Slow tank enemy sprite for Grave Slug.",
+    "used_by": ["enemy_grave_slug"]
+  },
+  "images/grave_slug_icon.png": {
+    "caption": "Small UI icon for Grave Slug.",
+    "used_by": ["enemy_grave_slug"]
+  },
+  "images/ash_imp_portrait.png": {
+    "caption": "Portrait card art for Ash Imp enemy.",
+    "used_by": ["enemy_ash_imp"]
+  },
+  "images/ash_imp_sprite.png": {
+    "caption": "Zigzag enemy sprite for Ash Imp.",
+    "used_by": ["enemy_ash_imp"]
+  },
+  "images/ash_imp_icon.png": {
+    "caption": "Small UI icon for Ash Imp.",
+    "used_by": ["enemy_ash_imp"]
+  },
+  "images/lantern_wisp_portrait.png": {
+    "caption": "Portrait card art for Lantern Wisp enemy.",
+    "used_by": ["enemy_lantern_wisp"]
+  },
+  "images/lantern_wisp_sprite.png": {
+    "caption": "Ranged spirit enemy sprite for Lantern Wisp.",
+    "used_by": ["enemy_lantern_wisp"]
+  },
+  "images/lantern_wisp_icon.png": {
+    "caption": "Small UI icon for Lantern Wisp.",
+    "used_by": ["enemy_lantern_wisp"]
+  },
+  "images/crowd_husk_portrait.png": {
+    "caption": "Portrait card art for Crowd Husk enemy.",
+    "used_by": ["enemy_crowd_husk"]
+  },
+  "images/crowd_husk_sprite.png": {
+    "caption": "Splitting enemy sprite for Crowd Husk.",
+    "used_by": ["enemy_crowd_husk"]
+  },
+  "images/crowd_husk_icon.png": {
+    "caption": "Small UI icon for Crowd Husk.",
+    "used_by": ["enemy_crowd_husk"]
+  },
+  "images/bone_cart_portrait.png": {
+    "caption": "Portrait card art for Bone Cart enemy.",
+    "used_by": ["enemy_bone_cart"]
+  },
+  "images/bone_cart_sprite.png": {
+    "caption": "Charging enemy sprite for Bone Cart.",
+    "used_by": ["enemy_bone_cart"]
+  },
+  "images/bone_cart_icon.png": {
+    "caption": "Small UI icon for Bone Cart.",
+    "used_by": ["enemy_bone_cart"]
+  },
+  "images/bell_ghast_portrait.png": {
+    "caption": "Portrait card art for Bell Ghast miniboss.",
+    "used_by": ["enemy_bell_ghast"]
+  },
+  "images/bell_ghast_sprite.png": {
+    "caption": "Large miniboss sprite for Bell Ghast.",
+    "used_by": ["enemy_bell_ghast"]
+  },
+  "images/bell_ghast_icon.png": {
+    "caption": "Small UI icon for Bell Ghast.",
+    "used_by": ["enemy_bell_ghast"]
+  },
+  "images/xp_mote_icon.png": {
+    "caption": "Glowing blue XP mote pickup icon.",
+    "used_by": ["item_xp_mote"]
+  },
+  "images/coin_small_icon.png": {
+    "caption": "Small gold coin pickup icon.",
+    "used_by": ["item_coin_small"]
+  },
+  "images/heart_small_icon.png": {
+    "caption": "Small heart healing pickup icon.",
+    "used_by": ["item_heart_small"]
+  },
+  "images/oil_wick_icon.png": {
+    "caption": "Burn synergy artifact icon for Oil Wick.",
+    "used_by": ["artifact_oil_wick"]
+  },
+  "images/magnet_brooch_icon.png": {
+    "caption": "Pickup radius artifact icon for Magnet Brooch.",
+    "used_by": ["item_magnet_brooch"]
+  },
+  "images/tiny_anvil_icon.png": {
+    "caption": "Projectile damage artifact icon for Tiny Anvil.",
+    "used_by": ["item_tiny_anvil"]
+  },
+  "images/pocket_sundial_icon.png": {
+    "caption": "Cooldown artifact icon for Pocket Sundial.",
+    "used_by": ["item_pocket_sundial"]
+  },
+  "images/cracked_lens_icon.png": {
+    "caption": "Critical chance artifact icon for Cracked Lens.",
+    "used_by": ["item_cracked_lens"]
+  },
+  "images/split_flint_icon.png": {
+    "caption": "Explosion artifact icon for Split Flint.",
+    "used_by": ["item_split_flint"]
+  },
+  "images/twin_moon_charm_icon.png": {
+    "caption": "Repeat attack artifact icon for Twin Moon Charm.",
+    "used_by": ["item_twin_moon_charm"]
+  },
+  "images/artifact_chest_icon.png": {
+    "caption": "Boss reward artifact chest icon.",
+    "used_by": ["item_artifact_chest"]
+  },
+  "images/ember_needle_icon.png": {
+    "caption": "Icon for Ember Needle ability.",
+    "used_by": ["ability_ember_needle"]
+  },
+  "images/gear_chakram_icon.png": {
+    "caption": "Icon for Gear Chakram ability.",
+    "used_by": ["ability_gear_chakram"]
+  },
+  "images/second_hand_icon.png": {
+    "caption": "Icon for Second Hand ability.",
+    "used_by": ["ability_second_hand"]
+  },
+  "images/briar_pike_icon.png": {
+    "caption": "Icon for Briar Pike ability.",
+    "used_by": ["ability_briar_pike"]
+  },
+  "images/quill_burst_icon.png": {
+    "caption": "Icon for Quill Burst ability.",
+    "used_by": ["ability_quill_burst"]
+  },
+  "images/prism_shard_icon.png": {
+    "caption": "Icon for Prism Shard ability.",
+    "used_by": ["ability_prism_shard"]
+  },
+  "images/grave_bell_icon.png": {
+    "caption": "Icon for Grave Bell ability.",
+    "used_by": ["ability_grave_bell"]
+  },
+  "images/widow_spark_icon.png": {
+    "caption": "Icon for Widow Spark ability.",
+    "used_by": ["ability_widow_spark"]
+  },
+  "images/cinder_wheel_icon.png": {
+    "caption": "Icon for Cinder Wheel ability.",
+    "used_by": ["ability_cinder_wheel"]
+  },
+  "images/projectile_sprite.png": {
+    "caption": "Generic projectile sprite.",
+    "used_by": ["misc_player_projectile"]
+  },
+  "images/projectile_icon.png": {
+    "caption": "Generic projectile icon.",
+    "used_by": ["misc_player_projectile"]
+  },
+  "images/burn_field_sprite.png": {
+    "caption": "Burn hazard field sprite.",
+    "used_by": ["misc_burn_field"]
+  },
+  "images/burn_field_icon.png": {
+    "caption": "Burn hazard field icon.",
+    "used_by": ["misc_burn_field"]
+  },
+  "images/level_card_icon.png": {
+    "caption": "Level up card UI icon.",
+    "used_by": ["misc_level_card"]
+  },
+  "images/spawn_marker_sprite.png": {
+    "caption": "Enemy spawn warning marker sprite.",
+    "used_by": ["misc_spawn_marker"]
+  },
+  "images/spawn_marker_icon.png": {
+    "caption": "Enemy spawn warning marker icon.",
+    "used_by": ["misc_spawn_marker"]
+  }
+}

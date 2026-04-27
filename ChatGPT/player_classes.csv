@@ -1,0 +1,7 @@
+id,name,role,image_portrait,image_sprite,image_icon,base_level,base_hp,base_mp,base_atk,base_def,base_spd,crit_rate,crit_dmg,hp_growth_per_level,starting_equipment,starting_abilities,notes
+mira_ashwake,Mira Ashwake,scout,images/mira_portrait.png,images/mira_sprite.png,images/mira_icon.png,1,100,0,8,3,165,0.05,1.8,8,artifact_oil_wick,ability_ember_needle,Fast starter with burn scaling
+bram_kettlewise,Bram Kettlewise,tinkerer,images/bram_portrait.png,images/bram_sprite.png,images/bram_icon.png,1,110,0,10,5,140,0.04,1.7,9,item_tiny_anvil,ability_gear_chakram,Projectile size specialist
+sable_noon,Sable Noon,tempo,images/sable_portrait.png,images/sable_sprite.png,images/sable_icon.png,1,90,0,6,2,155,0.07,1.9,7,item_pocket_sundial,ability_second_hand,Cooldown and slow control
+orrin_vale,Orrin Vale,gardener,images/orrin_portrait.png,images/orrin_sprite.png,images/orrin_icon.png,1,105,0,9,4,145,0.04,1.75,9,item_magnet_brooch,ability_briar_pike,Pickup and root build
+nix_quill,Nix Quill,mage,images/nix_portrait.png,images/nix_sprite.png,images/nix_icon.png,1,85,0,6,2,150,0.08,1.85,7,item_cracked_lens,ability_quill_burst,Fan projectile crit build
+jun_glass,Jun Glass,duelist,images/jun_portrait.png,images/jun_sprite.png,images/jun_icon.png,1,95,0,9,3,150,0.06,1.8,8,item_twin_moon_charm,ability_prism_shard,Repeat attacks and ricochet scaling

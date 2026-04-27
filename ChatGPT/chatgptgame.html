@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Moonwake Swarm Phase 2 Designer Tool</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #111018;
+        --panel: #1d1927;
+        --panel-2: #262034;
+        --line: rgba(255, 255, 255, 0.14);
+        --text: #f5f0f8;
+        --muted: #beb4ca;
+        --good: #7ed7c1;
+        --warn: #f5d67b;
+        --bad: #e86f68;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      header {
+        padding: 18px clamp(14px, 3vw, 32px);
+        border-bottom: 1px solid var(--line);
+        background: #171420;
+      }
+
+      h1 {
+        margin: 0 0 6px;
+        font-size: 24px;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        min-height: calc(100vh - 82px);
+      }
+
+      nav {
+        padding: 14px;
+        border-right: 1px solid var(--line);
+        background: #15121d;
+      }
+
+      button {
+        width: 100%;
+        min-height: 38px;
+        margin-bottom: 8px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--text);
+        text-align: left;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      button.active,
+      button:hover {
+        border-color: var(--warn);
+      }
+
+      .content {
+        padding: 16px clamp(14px, 3vw, 32px) 32px;
+        overflow: auto;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+
+      .search {
+        min-width: min(420px, 100%);
+        height: 38px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--text);
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        min-height: 160px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        overflow: hidden;
+      }
+
+      .card-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        background: var(--panel-2);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .thumb {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #111018;
+        color: var(--warn);
+        font-size: 10px;
+        text-align: center;
+      }
+
+      .card h2 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .card small {
+        color: var(--muted);
+      }
+
+      dl {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 6px 10px;
+        margin: 0;
+        padding: 12px;
+        font-size: 13px;
+      }
+
+      dt {
+        color: var(--muted);
+      }
+
+      dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .status {
+        display: grid;
+        gap: 8px;
+      }
+
+      .game-wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 280px;
+        gap: 14px;
+        align-items: start;
+      }
+
+      .game-stage {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #0f0d15;
+      }
+
+      #phase2Game {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        image-rendering: pixelated;
+      }
+
+      .game-hud {
+        position: absolute;
+        inset: 10px 10px auto;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .pill {
+        padding: 6px 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(17, 16, 24, 0.78);
+        font-size: 12px;
+      }
+
+      .side-panel {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .side-panel h3 {
+        margin: 0;
+        font-size: 16px;
+      }
+
+      .side-panel p {
+        font-size: 13px;
+      }
+
+      .side-panel button {
+        margin: 0;
+        text-align: center;
+      }
+
+      .check {
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+      }
+
+      .pass {
+        color: var(--good);
+      }
+
+      .fail {
+        color: var(--bad);
+      }
+
+      pre {
+        overflow: auto;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #0c0b11;
+      }
+
+      @media (max-width: 760px) {
+        main {
+          grid-template-columns: 1fr;
+        }
+
+        nav {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        .game-wrap {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Moonwake Swarm Phase 2 Designer Tool</h1>
+      <p>Open this file directly in a browser. Edit the data below in code or swap the external CSV files using the same columns.</p>
+    </header>
+
+    <main>
+      <nav id="nav"></nav>
+      <section class="content">
+        <div class="toolbar">
+          <h2 id="viewTitle">Player Classes</h2>
+          <input id="search" class="search" placeholder="Search ids, names, notes, image refs">
+        </div>
+        <div id="output"></div>
+      </section>
+    </main>
+
+    <script>
+      const csvData = {
+        "player_classes": `id,name,role,image_portrait,image_sprite,image_icon,base_level,base_hp,base_mp,base_atk,base_def,base_spd,crit_rate,crit_dmg,hp_growth_per_level,starting_equipment,starting_abilities,notes
+mira_ashwake,Mira Ashwake,scout,images/mira_portrait.png,images/mira_sprite.png,images/mira_icon.png,1,100,0,8,3,165,0.05,1.8,8,artifact_oil_wick,ability_ember_needle,Fast starter with burn scaling
+bram_kettlewise,Bram Kettlewise,tinkerer,images/bram_portrait.png,images/bram_sprite.png,images/bram_icon.png,1,110,0,10,5,140,0.04,1.7,9,item_tiny_anvil,ability_gear_chakram,Projectile size specialist
+sable_noon,Sable Noon,tempo,images/sable_portrait.png,images/sable_sprite.png,images/sable_icon.png,1,90,0,6,2,155,0.07,1.9,7,item_pocket_sundial,ability_second_hand,Cooldown and slow control
+orrin_vale,Orrin Vale,gardener,images/orrin_portrait.png,images/orrin_sprite.png,images/orrin_icon.png,1,105,0,9,4,145,0.04,1.75,9,item_magnet_brooch,ability_briar_pike,Pickup and root build
+nix_quill,Nix Quill,mage,images/nix_portrait.png,images/nix_sprite.png,images/nix_icon.png,1,85,0,6,2,150,0.08,1.85,7,item_cracked_lens,ability_quill_burst,Fan projectile crit build
+jun_glass,Jun Glass,duelist,images/jun_portrait.png,images/jun_sprite.png,images/jun_icon.png,1,95,0,9,3,150,0.06,1.8,8,item_twin_moon_charm,ability_prism_shard,Repeat attacks and ricochet scaling`,
+        "enemy_types": `id,name,image_portrait,image_sprite,image_icon,level,hp,mp,atk,def,spd,crit_rate,resistances,weaknesses,xp_reward,loot_table,ai_behavior,notes
+enemy_murkling,Murkling,images/murkling_portrait.png,images/murkling_sprite.png,images/murkling_icon.png,1,10,0,6,0,45,0.00,shadow,fire,2,item_coin_small;item_xp_mote,chase,Basic horde enemy
+enemy_needle_bat,Needle Bat,images/needle_bat_portrait.png,images/needle_bat_sprite.png,images/needle_bat_icon.png,1,7,0,5,0,85,0.00,air,pierce,2,item_xp_mote,chase_fast,Fast low HP diver
+enemy_grave_slug,Grave Slug,images/grave_slug_portrait.png,images/grave_slug_sprite.png,images/grave_slug_icon.png,1,28,0,9,2,25,0.00,knockback,fire,5,item_xp_mote;item_heart_small,slow_tank_chase,Slow body blocker
+enemy_ash_imp,Ash Imp,images/ash_imp_portrait.png,images/ash_imp_sprite.png,images/ash_imp_icon.png,2,14,0,7,1,58,0.02,fire,ice,3,item_xp_mote,zigzag_chase,Erratic chaser
+enemy_lantern_wisp,Lantern Wisp,images/lantern_wisp_portrait.png,images/lantern_wisp_sprite.png,images/lantern_wisp_icon.png,3,18,0,6,1,38,0.00,slow,shock,4,item_xp_mote;item_coin_small,keep_distance_shoot,Ranged pressure enemy
+enemy_crowd_husk,Crowd Husk,images/crowd_husk_portrait.png,images/crowd_husk_sprite.png,images/crowd_husk_icon.png,3,24,0,8,1,32,0.00,shadow,explosion,5,item_xp_mote,split_on_death,Splits into weak adds
+enemy_bone_cart,Bone Cart,images/bone_cart_portrait.png,images/bone_cart_sprite.png,images/bone_cart_icon.png,4,35,0,12,3,35,0.00,knockback,slow,7,item_xp_mote;item_coin_small,charge_line,Telegraphed charge
+enemy_bell_ghast,Bell Ghast,images/bell_ghast_portrait.png,images/bell_ghast_sprite.png,images/bell_ghast_icon.png,5,1500,0,18,4,28,0.00,slow,burst,50,item_artifact_chest,boss_pursue_pulse,Five minute miniboss`,
+        "items": `id,name,image_icon,type,stat_mods,use_effect,sell_value,rarity,notes
+item_xp_mote,XP Mote,images/xp_mote_icon.png,pickup,xp+2,gain_xp,0,common,Primary leveling pickup
+item_coin_small,Small Coin,images/coin_small_icon.png,pickup,coins+1,gain_coin,1,common,Run and meta currency
+item_heart_small,Small Heart,images/heart_small_icon.png,pickup,hp+15,heal,2,common,Emergency sustain
+artifact_oil_wick,Oil Wick,images/oil_wick_icon.png,artifact,burn_duration+2s,passive,20,common,Improves burn abilities
+item_magnet_brooch,Magnet Brooch,images/magnet_brooch_icon.png,artifact,pickup_radius+60%,passive,24,common,Accelerates XP collection
+item_tiny_anvil,Tiny Anvil,images/tiny_anvil_icon.png,artifact,projectile_damage+15%;projectile_speed-8%,passive,24,common,Projectile tradeoff
+item_pocket_sundial,Pocket Sundial,images/pocket_sundial_icon.png,artifact,cooldown-10%,passive,45,uncommon,Universal DPS boost
+item_cracked_lens,Cracked Lens,images/cracked_lens_icon.png,artifact,crit_rate+8%,passive,30,common,Fast hit synergy
+item_split_flint,Split Flint,images/split_flint_icon.png,artifact,burn_death_explosion+8,passive,60,uncommon,Burn turns into horde clear
+item_twin_moon_charm,Twin Moon Charm,images/twin_moon_charm_icon.png,artifact,every_5th_activation_repeats,passive,90,rare,Strong repeat synergy
+item_artifact_chest,Artifact Chest,images/artifact_chest_icon.png,chest,rare_artifact_offer+1,open_reward,0,rare,Boss reward chest`,
+        "abilities": `id,name,image_icon,type,cost,cooldown,power,target,status_effects,notes
+ability_ember_needle,Ember Needle,images/ember_needle_icon.png,projectile,0,0.45,8,nearest_enemy,burn_3dps_2s,Starter for Mira
+ability_gear_chakram,Gear Chakram,images/gear_chakram_icon.png,orbit,0,1.20,10,orbit_area,pierce_4,Starter for Bram
+ability_second_hand,Second Hand,images/second_hand_icon.png,beam,0,1.50,6,nearest_enemy,slow_20pct,Starter for Sable
+ability_briar_pike,Briar Pike,images/briar_pike_icon.png,area,0,1.10,14,near_enemy,root_0p3s,Starter for Orrin
+ability_quill_burst,Quill Burst,images/quill_burst_icon.png,projectile_fan,0,0.80,6,forward_arc,none,Starter for Nix
+ability_prism_shard,Prism Shard,images/prism_shard_icon.png,projectile,0,0.70,9,nearest_enemy,bounce_2,Starter for Jun
+ability_grave_bell,Grave Bell,images/grave_bell_icon.png,area,0,2.20,18,self_radius,knockback,Close range safety
+ability_widow_spark,Widow Spark,images/widow_spark_icon.png,chain,0,1.60,11,chain_targets,chain_5,Anti swarm burst
+ability_cinder_wheel,Cinder Wheel,images/cinder_wheel_icon.png,area,0,3.00,20,self_radius,burn_3dps_2s,Burn area clear`,
+        "misc_entities": `id,name,image_portrait,image_sprite,image_icon,type,hp,atk,def,effect,notes
+misc_player_projectile,Player Projectile,MISSING_IMAGE,images/projectile_sprite.png,images/projectile_icon.png,projectile,1,8,0,hit_enemy,Generic bullet fallback
+misc_burn_field,Burn Field,MISSING_IMAGE,images/burn_field_sprite.png,images/burn_field_icon.png,hazard,1,3,0,damage_over_time,Created by burn attacks
+misc_level_card,Level Up Card,MISSING_IMAGE,MISSING_IMAGE,images/level_card_icon.png,ui,0,0,0,choose_upgrade,Upgrade selection UI
+misc_damage_number,Damage Number,MISSING_IMAGE,MISSING_IMAGE,MISSING_IMAGE,ui,0,0,0,show_feedback,Uses generated text not image
+misc_spawn_marker,Spawn Marker,MISSING_IMAGE,images/spawn_marker_sprite.png,images/spawn_marker_icon.png,warning,1,0,0,telegraph_spawn,Optional wave warning`
+      };
+
+      const imageMap = {
+        "images/mira_portrait.png": { caption: "Portrait of Mira Ashwake with lantern scout styling.", used_by: ["mira_ashwake"] },
+        "images/mira_sprite.png": { caption: "Top-down playable sprite for Mira Ashwake.", used_by: ["mira_ashwake"] },
+        "images/mira_icon.png": { caption: "Small UI icon for Mira Ashwake.", used_by: ["mira_ashwake"] },
+        "images/bram_portrait.png": { caption: "Portrait of Bram Kettlewise with tinkerer gear.", used_by: ["bram_kettlewise"] },
+        "images/bram_sprite.png": { caption: "Top-down playable sprite for Bram Kettlewise.", used_by: ["bram_kettlewise"] },
+        "images/bram_icon.png": { caption: "Small UI icon for Bram Kettlewise.", used_by: ["bram_kettlewise"] },
+        "images/sable_portrait.png": { caption: "Portrait of Sable Noon with clock thief theme.", used_by: ["sable_noon"] },
+        "images/sable_sprite.png": { caption: "Top-down playable sprite for Sable Noon.", used_by: ["sable_noon"] },
+        "images/sable_icon.png": { caption: "Small UI icon for Sable Noon.", used_by: ["sable_noon"] },
+        "images/orrin_portrait.png": { caption: "Portrait of Orrin Vale with grave gardener theme.", used_by: ["orrin_vale"] },
+        "images/orrin_sprite.png": { caption: "Top-down playable sprite for Orrin Vale.", used_by: ["orrin_vale"] },
+        "images/orrin_icon.png": { caption: "Small UI icon for Orrin Vale.", used_by: ["orrin_vale"] },
+        "images/nix_portrait.png": { caption: "Portrait of Nix Quill with ink mage styling.", used_by: ["nix_quill"] },
+        "images/nix_sprite.png": { caption: "Top-down playable sprite for Nix Quill.", used_by: ["nix_quill"] },
+        "images/nix_icon.png": { caption: "Small UI icon for Nix Quill.", used_by: ["nix_quill"] },
+        "images/jun_portrait.png": { caption: "Portrait of Jun Glass with mirror duelist theme.", used_by: ["jun_glass"] },
+        "images/jun_sprite.png": { caption: "Top-down playable sprite for Jun Glass.", used_by: ["jun_glass"] },
+        "images/jun_icon.png": { caption: "Small UI icon for Jun Glass.", used_by: ["jun_glass"] },
+        "images/murkling_portrait.png": { caption: "Portrait card art for Murkling enemy.", used_by: ["enemy_murkling"] },
+        "images/murkling_sprite.png": { caption: "Small shadow chaser sprite for Murkling.", used_by: ["enemy_murkling"] },
+        "images/murkling_icon.png": { caption: "Small UI icon for Murkling.", used_by: ["enemy_murkling"] },
+        "images/needle_bat_portrait.png": { caption: "Portrait card art for Needle Bat enemy.", used_by: ["enemy_needle_bat"] },
+        "images/needle_bat_sprite.png": { caption: "Fast bat enemy sprite.", used_by: ["enemy_needle_bat"] },
+        "images/needle_bat_icon.png": { caption: "Small UI icon for Needle Bat.", used_by: ["enemy_needle_bat"] },
+        "images/grave_slug_portrait.png": { caption: "Portrait card art for Grave Slug enemy.", used_by: ["enemy_grave_slug"] },
+        "images/grave_slug_sprite.png": { caption: "Slow tank enemy sprite for Grave Slug.", used_by: ["enemy_grave_slug"] },
+        "images/grave_slug_icon.png": { caption: "Small UI icon for Grave Slug.", used_by: ["enemy_grave_slug"] },
+        "images/ash_imp_portrait.png": { caption: "Portrait card art for Ash Imp enemy.", used_by: ["enemy_ash_imp"] },
+        "images/ash_imp_sprite.png": { caption: "Zigzag enemy sprite for Ash Imp.", used_by: ["enemy_ash_imp"] },
+        "images/ash_imp_icon.png": { caption: "Small UI icon for Ash Imp.", used_by: ["enemy_ash_imp"] },
+        "images/lantern_wisp_portrait.png": { caption: "Portrait card art for Lantern Wisp enemy.", used_by: ["enemy_lantern_wisp"] },
+        "images/lantern_wisp_sprite.png": { caption: "Ranged spirit enemy sprite for Lantern Wisp.", used_by: ["enemy_lantern_wisp"] },
+        "images/lantern_wisp_icon.png": { caption: "Small UI icon for Lantern Wisp.", used_by: ["enemy_lantern_wisp"] },
+        "images/crowd_husk_portrait.png": { caption: "Portrait card art for Crowd Husk enemy.", used_by: ["enemy_crowd_husk"] },
+        "images/crowd_husk_sprite.png": { caption: "Splitting enemy sprite for Crowd Husk.", used_by: ["enemy_crowd_husk"] },
+        "images/crowd_husk_icon.png": { caption: "Small UI icon for Crowd Husk.", used_by: ["enemy_crowd_husk"] },
+        "images/bone_cart_portrait.png": { caption: "Portrait card art for Bone Cart enemy.", used_by: ["enemy_bone_cart"] },
+        "images/bone_cart_sprite.png": { caption: "Charging enemy sprite for Bone Cart.", used_by: ["enemy_bone_cart"] },
+        "images/bone_cart_icon.png": { caption: "Small UI icon for Bone Cart.", used_by: ["enemy_bone_cart"] },
+        "images/bell_ghast_portrait.png": { caption: "Portrait card art for Bell Ghast miniboss.", used_by: ["enemy_bell_ghast"] },
+        "images/bell_ghast_sprite.png": { caption: "Large miniboss sprite for Bell Ghast.", used_by: ["enemy_bell_ghast"] },
+        "images/bell_ghast_icon.png": { caption: "Small UI icon for Bell Ghast.", used_by: ["enemy_bell_ghast"] },
+        "images/xp_mote_icon.png": { caption: "Glowing blue XP mote pickup icon.", used_by: ["item_xp_mote"] },
+        "images/coin_small_icon.png": { caption: "Small gold coin pickup icon.", used_by: ["item_coin_small"] },
+        "images/heart_small_icon.png": { caption: "Small heart healing pickup icon.", used_by: ["item_heart_small"] },
+        "images/oil_wick_icon.png": { caption: "Burn synergy artifact icon for Oil Wick.", used_by: ["artifact_oil_wick"] },
+        "images/magnet_brooch_icon.png": { caption: "Pickup radius artifact icon for Magnet Brooch.", used_by: ["item_magnet_brooch"] },
+        "images/tiny_anvil_icon.png": { caption: "Projectile damage artifact icon for Tiny Anvil.", used_by: ["item_tiny_anvil"] },
+        "images/pocket_sundial_icon.png": { caption: "Cooldown artifact icon for Pocket Sundial.", used_by: ["item_pocket_sundial"] },
+        "images/cracked_lens_icon.png": { caption: "Critical chance artifact icon for Cracked Lens.", used_by: ["item_cracked_lens"] },
+        "images/split_flint_icon.png": { caption: "Explosion artifact icon for Split Flint.", used_by: ["item_split_flint"] },
+        "images/twin_moon_charm_icon.png": { caption: "Repeat attack artifact icon for Twin Moon Charm.", used_by: ["item_twin_moon_charm"] },
+        "images/artifact_chest_icon.png": { caption: "Boss reward artifact chest icon.", used_by: ["item_artifact_chest"] },
+        "images/ember_needle_icon.png": { caption: "Icon for Ember Needle ability.", used_by: ["ability_ember_needle"] },
+        "images/gear_chakram_icon.png": { caption: "Icon for Gear Chakram ability.", used_by: ["ability_gear_chakram"] },
+        "images/second_hand_icon.png": { caption: "Icon for Second Hand ability.", used_by: ["ability_second_hand"] },
+        "images/briar_pike_icon.png": { caption: "Icon for Briar Pike ability.", used_by: ["ability_briar_pike"] },
+        "images/quill_burst_icon.png": { caption: "Icon for Quill Burst ability.", used_by: ["ability_quill_burst"] },
+        "images/prism_shard_icon.png": { caption: "Icon for Prism Shard ability.", used_by: ["ability_prism_shard"] },
+        "images/grave_bell_icon.png": { caption: "Icon for Grave Bell ability.", used_by: ["ability_grave_bell"] },
+        "images/widow_spark_icon.png": { caption: "Icon for Widow Spark ability.", used_by: ["ability_widow_spark"] },
+        "images/cinder_wheel_icon.png": { caption: "Icon for Cinder Wheel ability.", used_by: ["ability_cinder_wheel"] },
+        "images/projectile_sprite.png": { caption: "Generic projectile sprite.", used_by: ["misc_player_projectile"] },
+        "images/projectile_icon.png": { caption: "Generic projectile icon.", used_by: ["misc_player_projectile"] },
+        "images/burn_field_sprite.png": { caption: "Burn hazard field sprite.", used_by: ["misc_burn_field"] },
+        "images/burn_field_icon.png": { caption: "Burn hazard field icon.", used_by: ["misc_burn_field"] },
+        "images/level_card_icon.png": { caption: "Level up card UI icon.", used_by: ["misc_level_card"] },
+        "images/spawn_marker_sprite.png": { caption: "Enemy spawn warning marker sprite.", used_by: ["misc_spawn_marker"] },
+        "images/spawn_marker_icon.png": { caption: "Enemy spawn warning marker icon.", used_by: ["misc_spawn_marker"] }
+      };
+
+      const labels = {
+        play: "Play Game",
+        player_classes: "Player Classes",
+        enemy_types: "Enemy Types",
+        items: "Items",
+        abilities: "Abilities",
+        misc_entities: "Misc Entities",
+        checklist: "Checklist",
+        guide: "Balancing Guide"
+      };
+
+      const parseCSV = (text) => {
+        const lines = text.trim().split(/\r?\n/);
+        const headers = lines.shift().split(",");
+        return lines.map((line) => {
+          const cells = line.split(",");
+          return Object.fromEntries(headers.map((header, i) => [header, cells[i] ?? ""]));
+        });
+      };
+
+      const data = Object.fromEntries(Object.entries(csvData).map(([key, value]) => [key, parseCSV(value)]));
+      let current = "play";
+      let game = null;
+
+      function validate() {
+        const checks = [];
+        const brokenImages = [];
+        for (const [file, rows] of Object.entries(data)) {
+          for (const row of rows) {
+            for (const [key, value] of Object.entries(row)) {
+              if (key.startsWith("image_") && value !== "MISSING_IMAGE" && !imageMap[value]) {
+                brokenImages.push(`${file}:${row.id}:${key}:${value}`);
+              }
+            }
+          }
+        }
+        checks.push({ name: "All image fields reference image_map.json or MISSING_IMAGE", pass: brokenImages.length === 0, broken: brokenImages });
+
+        const duplicateIds = [];
+        for (const [file, rows] of Object.entries(data)) {
+          const seen = new Set();
+          for (const row of rows) {
+            if (seen.has(row.id)) duplicateIds.push(`${file}:${row.id}`);
+            seen.add(row.id);
+          }
+        }
+        checks.push({ name: "No duplicate id values within a CSV", pass: duplicateIds.length === 0, broken: duplicateIds });
+
+        const abilityIds = new Set(data.abilities.map((row) => row.id));
+        const brokenAbilities = [];
+        for (const row of data.player_classes) {
+          for (const id of row.starting_abilities.split(";").filter(Boolean)) {
+            if (!abilityIds.has(id)) brokenAbilities.push(`player_classes:${row.id}:${id}`);
+          }
+        }
+        checks.push({ name: "All ability ids referenced by classes/items exist in abilities.csv", pass: brokenAbilities.length === 0, broken: brokenAbilities });
+
+        const itemIds = new Set(data.items.map((row) => row.id));
+        const brokenLoot = [];
+        for (const row of data.enemy_types) {
+          for (const id of row.loot_table.split(";").filter(Boolean)) {
+            if (!itemIds.has(id)) brokenLoot.push(`enemy_types:${row.id}:${id}`);
+          }
+        }
+        checks.push({ name: "All loot item ids exist in items.csv", pass: brokenLoot.length === 0, broken: brokenLoot });
+        return checks;
+      }
+
+      function imageFor(row) {
+        return row.image_icon || row.image_sprite || row.image_portrait || "MISSING_IMAGE";
+      }
+
+      function renderCards(rows) {
+        const q = document.querySelector("#search").value.trim().toLowerCase();
+        const filtered = rows.filter((row) => JSON.stringify(row).toLowerCase().includes(q));
+        document.querySelector("#output").innerHTML = `<div class="cards">${filtered.map((row) => {
+          const image = imageFor(row);
+          return `<article class="card">
+            <div class="card-head">
+              <div class="thumb">${image === "MISSING_IMAGE" ? "MISSING" : "IMG"}</div>
+              <div><h2>${row.name || row.id}</h2><small>${row.id}</small></div>
+            </div>
+            <dl>${Object.entries(row).map(([key, value]) => `<dt>${key}</dt><dd>${value}</dd>`).join("")}</dl>
+          </article>`;
+        }).join("")}</div>`;
+      }
+
+      function renderChecklist() {
+        const checks = validate();
+        document.querySelector("#output").innerHTML = `<div class="status">${checks.map((check) => `
+          <div class="check">
+            <strong class="${check.pass ? "pass" : "fail"}">${check.pass ? "PASS" : "FAIL"}</strong>
+            ${check.name}
+            ${check.broken.length ? `<pre>${check.broken.join("\n")}</pre>` : ""}
+          </div>
+        `).join("")}</div>`;
+      }
+
+      function renderGuide() {
+        document.querySelector("#output").innerHTML = `
+          <div class="check">
+            <ul>
+              <li>Tune enemy hp to change time-to-kill before changing spawn density.</li>
+              <li>Tune enemy atk only after survivability feels readable and fair.</li>
+              <li>Tune ability cooldown for feel and ability power for DPS targets.</li>
+              <li>Use xp_reward to control level pace without touching combat math.</li>
+              <li>Keep player class base_spd changes small because movement strongly affects difficulty.</li>
+            </ul>
+            <p>Update a stat in the relevant CSV, then open Checklist. For image swaps, update the filename and add the same key to image_map.json.</p>
+          </div>`;
+      }
+
+      function renderPlay() {
+        document.querySelector("#output").innerHTML = `
+          <div class="game-wrap">
+            <div class="game-stage">
+              <canvas id="phase2Game" width="960" height="540" aria-label="Playable Phase 2 game"></canvas>
+              <div class="game-hud">
+                <span class="pill" id="gameHp">HP</span>
+                <span class="pill" id="gameTimer">00:00</span>
+                <span class="pill" id="gameStats">Lv 1</span>
+              </div>
+            </div>
+            <aside class="side-panel">
+              <h3>Phase 2 Playable Build</h3>
+              <p>This build uses the embedded Phase 2 class, enemy, ability, and item data. Move with WASD or arrow keys. Attacks auto-fire.</p>
+              <button id="restartGame">Restart Run</button>
+              <p id="gameLog">Mira Ashwake starts with Ember Needle.</p>
+            </aside>
+          </div>`;
+        startGame();
+      }
+
+      function startGame() {
+        const canvas = document.querySelector("#phase2Game");
+        const ctx = canvas.getContext("2d");
+        const hero = data.player_classes[0];
+        const abilityById = Object.fromEntries(data.abilities.map((a) => [a.id, a]));
+        const enemyPool = data.enemy_types.filter((e) => e.id !== "enemy_bell_ghast");
+        const bossDef = data.enemy_types.find((e) => e.id === "enemy_bell_ghast");
+        const keys = {};
+        let seed = 260426;
+        const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+        const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+        const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+        const state = {
+          time: 0,
+          last: 0,
+          kills: 0,
+          paused: false,
+          over: false,
+          spawnBank: 0,
+          player: {
+            x: 480,
+            y: 270,
+            r: 14,
+            hp: Number(hero.base_hp),
+            maxHp: Number(hero.base_hp),
+            spd: Number(hero.base_spd),
+            level: 1,
+            xp: 0,
+            xpNeed: 12,
+            damageMult: 1,
+            pickupRadius: 32
+          },
+          weapons: [{ id: hero.starting_abilities, cd: 0, level: 1 }],
+          enemies: [],
+          bullets: [],
+          pickups: [],
+          pulse: 0
+        };
+
+        function resizeCanvas() {
+          const rect = canvas.getBoundingClientRect();
+          canvas.width = Math.max(320, Math.floor(rect.width));
+          canvas.height = Math.max(180, Math.floor(rect.width * 9 / 16));
+        }
+
+        function enemyScale(row, boss = false) {
+          const m = state.time / 60;
+          const hp = boss ? Number(row.hp) : Math.round(Number(row.hp) * (1 + 0.22 * m));
+          return {
+            id: row.id,
+            name: row.name,
+            x: 0,
+            y: 0,
+            r: boss ? 34 : row.id.includes("bat") ? 10 : row.id.includes("slug") ? 17 : 13,
+            hp,
+            maxHp: hp,
+            atk: Math.round(Number(row.atk) * (1 + 0.1 * m)),
+            spd: Number(row.spd) + Math.min(30, 2.5 * m),
+            xp: Number(row.xp_reward),
+            color: boss ? "#f5d67b" : row.id.includes("bat") ? "#8a5c72" : row.id.includes("wisp") ? "#7ed7c1" : "#604b7a",
+            burn: 0,
+            boss
+          };
+        }
+
+        function spawn(row = null, boss = false) {
+          const source = row || enemyPool[Math.floor(rand() * Math.min(enemyPool.length, 2 + Math.floor(state.time / 60)))];
+          const e = enemyScale(source, boss);
+          const edge = Math.floor(rand() * 4);
+          e.x = edge === 0 ? -40 : edge === 1 ? canvas.width + 40 : rand() * canvas.width;
+          e.y = edge === 2 ? -40 : edge === 3 ? canvas.height + 40 : rand() * canvas.height;
+          state.enemies.push(e);
+        }
+
+        function nearest(range) {
+          let best = null;
+          let bestD = range;
+          for (const e of state.enemies) {
+            const d = distance(state.player, e);
+            if (d < bestD) {
+              best = e;
+              bestD = d;
+            }
+          }
+          return best;
+        }
+
+        function damageEnemy(e, amount, burn = false) {
+          e.hp -= amount * state.player.damageMult;
+          if (burn) e.burn = Math.max(e.burn, 2);
+        }
+
+        function fire(w) {
+          const ability = abilityById[w.id];
+          if (!ability) return;
+          const power = Number(ability.power) + (w.level - 1) * 3;
+          if (ability.type === "area") {
+            state.pulse = 0.18;
+            for (const e of state.enemies) if (distance(state.player, e) < 86) damageEnemy(e, power, ability.status_effects.includes("burn"));
+            return;
+          }
+          if (ability.type === "chain") {
+            for (const e of state.enemies.filter((e) => distance(state.player, e) < 220).slice(0, 4 + w.level)) damageEnemy(e, power);
+            return;
+          }
+          const target = nearest(280);
+          if (!target) return;
+          const a = Math.atan2(target.y - state.player.y, target.x - state.player.x);
+          state.bullets.push({ x: state.player.x, y: state.player.y, vx: Math.cos(a) * 430, vy: Math.sin(a) * 430, r: 5, life: 1.1, damage: power, burn: ability.status_effects.includes("burn") });
+        }
+
+        function gainXP(n) {
+          state.player.xp += n;
+          if (state.player.xp >= state.player.xpNeed) {
+            state.player.xp -= state.player.xpNeed;
+            state.player.level += 1;
+            state.player.xpNeed = Math.round(state.player.xpNeed * 1.28 + 4);
+            const upgrades = ["ability_grave_bell", "ability_widow_spark", hero.starting_abilities];
+            const pick = upgrades[(state.player.level + state.kills) % upgrades.length];
+            const existing = state.weapons.find((w) => w.id === pick);
+            if (existing) existing.level += 1;
+            else state.weapons.push({ id: pick, cd: 0, level: 1 });
+            state.player.damageMult += 0.04;
+            document.querySelector("#gameLog").textContent = `Level ${state.player.level}: upgraded ${abilityById[pick].name}.`;
+          }
+        }
+
+        function update(dt) {
+          state.time += dt;
+          const x = (keys.d || keys.ArrowRight ? 1 : 0) - (keys.a || keys.ArrowLeft ? 1 : 0);
+          const y = (keys.s || keys.ArrowDown ? 1 : 0) - (keys.w || keys.ArrowUp ? 1 : 0);
+          const len = Math.hypot(x, y) || 1;
+          state.player.x = clamp(state.player.x + x / len * state.player.spd * dt, 16, canvas.width - 16);
+          state.player.y = clamp(state.player.y + y / len * state.player.spd * dt, 16, canvas.height - 16);
+
+          if (state.time > 300 && !state.bossSpawned) {
+            state.bossSpawned = true;
+            spawn(bossDef, true);
+            document.querySelector("#gameLog").textContent = "Bell Ghast has arrived.";
+          }
+
+          const spawnRate = 1.2 + 0.55 * (state.time / 60);
+          state.spawnBank += spawnRate * dt;
+          while (state.spawnBank >= 1 && state.enemies.length < 45 + 18 * (state.time / 60)) {
+            spawn();
+            state.spawnBank -= 1;
+          }
+
+          for (const w of state.weapons) {
+            const ability = abilityById[w.id];
+            w.cd -= dt;
+            if (w.cd <= 0) {
+              fire(w);
+              w.cd = Number(ability.cooldown) * Math.max(0.62, 1 - (w.level - 1) * 0.06);
+            }
+          }
+
+          for (const e of state.enemies) {
+            const a = Math.atan2(state.player.y - e.y, state.player.x - e.x);
+            e.x += Math.cos(a) * e.spd * dt;
+            e.y += Math.sin(a) * e.spd * dt;
+            if (e.burn > 0) {
+              e.burn -= dt;
+              e.hp -= 3 * dt;
+            }
+            if (distance(state.player, e) < state.player.r + e.r) state.player.hp -= e.atk * dt;
+          }
+
+          for (const b of state.bullets) {
+            b.x += b.vx * dt;
+            b.y += b.vy * dt;
+            b.life -= dt;
+            for (const e of state.enemies) {
+              if (b.life > 0 && distance(b, e) < b.r + e.r) {
+                damageEnemy(e, b.damage, b.burn);
+                b.life = 0;
+              }
+            }
+          }
+
+          state.enemies = state.enemies.filter((e) => {
+            if (e.hp > 0) return true;
+            state.kills += 1;
+            state.pickups.push({ x: e.x, y: e.y, r: 5, value: e.xp });
+            if (e.boss) {
+              state.over = true;
+              document.querySelector("#gameLog").textContent = "Boss defeated. Phase 2 run complete.";
+            }
+            return false;
+          });
+
+          for (const p of state.pickups) {
+            if (distance(state.player, p) < state.player.pickupRadius) {
+              gainXP(p.value);
+              p.dead = true;
+            }
+          }
+          state.pickups = state.pickups.filter((p) => !p.dead);
+          state.bullets = state.bullets.filter((b) => b.life > 0);
+          state.pulse = Math.max(0, state.pulse - dt);
+          if (state.player.hp <= 0) {
+            state.over = true;
+            document.querySelector("#gameLog").textContent = "Run ended. Press Restart Run.";
+          }
+        }
+
+        function circle(x, y, r, color) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        function draw() {
+          ctx.fillStyle = "#111018";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.strokeStyle = "rgba(255,255,255,.055)";
+          for (let x = -40; x < canvas.width + 80; x += 40) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x + 80, canvas.height);
+            ctx.stroke();
+          }
+          for (const p of state.pickups) circle(p.x, p.y, p.r, "#6ee7ff");
+          for (const b of state.bullets) circle(b.x, b.y, b.r, "#ff9f43");
+          for (const e of state.enemies) {
+            circle(e.x, e.y, e.r, e.burn > 0 ? "#ff9f43" : e.color);
+            if (e.boss) {
+              ctx.strokeStyle = "#f5d67b";
+              ctx.lineWidth = 3;
+              ctx.stroke();
+            }
+          }
+          if (state.pulse > 0) {
+            ctx.strokeStyle = "rgba(245,214,123,.7)";
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.arc(state.player.x, state.player.y, 86, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+          circle(state.player.x, state.player.y, state.player.r, "#f5d67b");
+          circle(state.player.x + 5, state.player.y - 3, 4, "#e86f68");
+        }
+
+        function updateHud() {
+          const t = Math.floor(state.time);
+          document.querySelector("#gameHp").textContent = `HP ${Math.max(0, Math.ceil(state.player.hp))}/${state.player.maxHp}`;
+          document.querySelector("#gameTimer").textContent = `${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`;
+          document.querySelector("#gameStats").textContent = `Lv ${state.player.level} | ${state.kills} kills`;
+        }
+
+        function frame(now) {
+          if (game !== state) return;
+          const dt = Math.min(0.033, (now - state.last) / 1000 || 0);
+          state.last = now;
+          if (!state.over) update(dt);
+          draw();
+          updateHud();
+          requestAnimationFrame(frame);
+        }
+
+        window.onkeydown = (e) => { keys[e.key] = true; };
+        window.onkeyup = (e) => { keys[e.key] = false; };
+        document.querySelector("#restartGame").onclick = () => startGame();
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas, { once: true });
+        game = state;
+        requestAnimationFrame(frame);
+      }
+
+      function render() {
+        document.querySelector("#viewTitle").textContent = labels[current];
+        document.querySelectorAll("nav button").forEach((button) => button.classList.toggle("active", button.dataset.view === current));
+        document.querySelector("#search").style.display = data[current] ? "" : "none";
+        if (current === "play") renderPlay();
+        else if (current === "checklist") renderChecklist();
+        else if (current === "guide") renderGuide();
+        else renderCards(data[current]);
+      }
+
+      const nav = document.querySelector("#nav");
+      ["play", ...Object.keys(data), "checklist", "guide"].forEach((view) => {
+        const button = document.createElement("button");
+        button.textContent = labels[view];
+        button.dataset.view = view;
+        button.addEventListener("click", () => {
+          current = view;
+          render();
+        });
+        nav.appendChild(button);
+      });
+
+      document.querySelector("#search").addEventListener("input", render);
+      render();
+    </script>
+  </body>
+</html>

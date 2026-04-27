@@ -1,0 +1,27 @@
+{
+  "images/jax_sprite.png": {
+    "path": "./assets/sprites/characters/jax.png",
+    "caption": "Top-down sprite for Jax",
+    "used_by": ["char_jax"]
+  },
+  "images/nova_sprite.png": {
+    "path": "./assets/sprites/characters/nova.png",
+    "caption": "Top-down sprite for Nova",
+    "used_by": ["char_nova"]
+  },
+  "images/scrapling.png": {
+    "path": "./assets/sprites/enemies/scrapling.png",
+    "caption": "Sprite of the Scrapling swarm enemy",
+    "used_by": ["en_scrapling"]
+  },
+  "images/hound.png": {
+    "path": "./assets/sprites/enemies/hound.png",
+    "caption": "Sprite of the Chrome-Hound dasher",
+    "used_by": ["en_hound"]
+  },
+  "images/gargantua.png": {
+    "path": "./assets/sprites/enemies/gargantua.png",
+    "caption": "Sprite of the Junk-Gargantua elite boss",
+    "used_by": ["en_gargantua"]
+  }
+}

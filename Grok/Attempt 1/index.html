@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bloodsurge: Eternal Night</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <canvas id="game" width="1200" height="800"></canvas>
+    
+    <div id="hud">
+        <div>Time: <span id="timer">0:00</span></div>
+        <div>Level: <span id="level">1</span></div>
+        <div>HP: <span id="hp">100</span></div>
+    </div>
+
+    <div id="levelup" class="modal">
+        <h2>Level Up! Choose one:</h2>
+        <div id="choices"></div>
+    </div>
+
+    <div id="gameover" class="modal">
+        <h2>You Have Fallen</h2>
+        <p>Survived: <span id="finaltime"></span></p>
+        <p>Kills: <span id="kills">0</span></p>
+        <button onclick="restart()">Return to Camp</button>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

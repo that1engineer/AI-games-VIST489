@@ -1,0 +1,12 @@
+id,name,image_icon,type,stat_mods,use_effect,sell_value,rarity,notes
+item_xp_mote,XP Mote,images/xp_mote_icon.png,pickup,xp+2,gain_xp,0,common,Primary leveling pickup
+item_coin_small,Small Coin,images/coin_small_icon.png,pickup,coins+1,gain_coin,1,common,Run and meta currency
+item_heart_small,Small Heart,images/heart_small_icon.png,pickup,hp+15,heal,2,common,Emergency sustain
+artifact_oil_wick,Oil Wick,images/oil_wick_icon.png,artifact,burn_duration+2s,passive,20,common,Improves burn abilities
+item_magnet_brooch,Magnet Brooch,images/magnet_brooch_icon.png,artifact,pickup_radius+60%,passive,24,common,Accelerates XP collection
+item_tiny_anvil,Tiny Anvil,images/tiny_anvil_icon.png,artifact,projectile_damage+15%;projectile_speed-8%,passive,24,common,Projectile tradeoff
+item_pocket_sundial,Pocket Sundial,images/pocket_sundial_icon.png,artifact,cooldown-10%,passive,45,uncommon,Universal DPS boost
+item_cracked_lens,Cracked Lens,images/cracked_lens_icon.png,artifact,crit_rate+8%,passive,30,common,Fast hit synergy
+item_split_flint,Split Flint,images/split_flint_icon.png,artifact,burn_death_explosion+8,passive,60,uncommon,Burn turns into horde clear
+item_twin_moon_charm,Twin Moon Charm,images/twin_moon_charm_icon.png,artifact,every_5th_activation_repeats,passive,90,rare,Strong repeat synergy
+item_artifact_chest,Artifact Chest,images/artifact_chest_icon.png,chest,rare_artifact_offer+1,open_reward,0,rare,Boss reward chest

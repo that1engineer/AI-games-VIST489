@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Emberfall: Nightswarm</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game" width="960" height="640"></canvas>
+
+    <!-- HUD overlay -->
+    <div id="hud" class="hud">
+      <div class="hud-tl">
+        <div class="hp">
+          <div class="hp-bar"><div id="hp-fill" class="hp-fill"></div></div>
+          <span id="hp-text">100 / 100</span>
+        </div>
+        <div class="meta-line">
+          <span id="char-name">Wyck</span>
+          <span class="dot">•</span>
+          <span id="run-time">00:00</span>
+        </div>
+      </div>
+
+      <div class="hud-tc">
+        <div class="xp-bar"><div id="xp-fill" class="xp-fill"></div></div>
+        <div class="lvl">Lv <span id="lvl-text">1</span></div>
+      </div>
+
+      <div class="hud-tr">
+        <div id="weapons-row" class="icon-row"></div>
+        <div id="artifacts-row" class="icon-row small"></div>
+      </div>
+
+      <div class="hud-bl">
+        <span>★ <span id="ember-count">0</span></span>
+        <span>☠ <span id="kill-count">0</span></span>
+      </div>
+
+      <div class="hud-br">
+        <canvas id="minimap" width="180" height="120"></canvas>
+      </div>
+    </div>
+
+    <!-- Card overlay -->
+    <div id="card-overlay" class="overlay hidden">
+      <div class="card-title">Level Up — Choose One</div>
+      <div id="cards" class="cards"></div>
+      <div class="hint">[1] [2] [3]</div>
+    </div>
+
+    <!-- Title / character select -->
+    <div id="title-overlay" class="overlay">
+      <h1>EMBERFALL<span class="sub">Nightswarm</span></h1>
+      <p class="tag">Hold the last flame against the encroaching night.</p>
+      <div id="char-select" class="cards"></div>
+      <div class="meta-shop">
+        <h3>Shard Shop <span id="shard-balance">0★</span></h3>
+        <div id="shop" class="shop"></div>
+      </div>
+      <div class="hint">WASD / Arrows to move. Auto-fire. P to pause.</div>
+    </div>
+
+    <!-- Pause -->
+    <div id="pause-overlay" class="overlay hidden">
+      <h2>Paused</h2>
+      <button id="resume-btn">Resume (P)</button>
+      <button id="quit-btn">Abandon Run</button>
+    </div>
+
+    <!-- Death / Win -->
+    <div id="end-overlay" class="overlay hidden">
+      <h2 id="end-title">You fell to the night.</h2>
+      <div id="end-stats" class="end-stats"></div>
+      <button id="end-btn">Continue</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
