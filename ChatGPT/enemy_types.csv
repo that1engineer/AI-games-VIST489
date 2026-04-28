@@ -1,9 +1,0 @@
-id,name,image_portrait,image_sprite,image_icon,level,hp,mp,atk,def,spd,crit_rate,resistances,weaknesses,xp_reward,loot_table,ai_behavior,notes
-enemy_murkling,Murkling,images/murkling_portrait.png,images/murkling_sprite.png,images/murkling_icon.png,1,10,0,6,0,45,0.00,shadow,fire,2,item_coin_small;item_xp_mote,chase,Basic horde enemy
-enemy_needle_bat,Needle Bat,images/needle_bat_portrait.png,images/needle_bat_sprite.png,images/needle_bat_icon.png,1,7,0,5,0,85,0.00,air,pierce,2,item_xp_mote,chase_fast,Fast low HP diver
-enemy_grave_slug,Grave Slug,images/grave_slug_portrait.png,images/grave_slug_sprite.png,images/grave_slug_icon.png,1,28,0,9,2,25,0.00,knockback,fire,5,item_xp_mote;item_heart_small,slow_tank_chase,Slow body blocker
-enemy_ash_imp,Ash Imp,images/ash_imp_portrait.png,images/ash_imp_sprite.png,images/ash_imp_icon.png,2,14,0,7,1,58,0.02,fire,ice,3,item_xp_mote,zigzag_chase,Erratic chaser
-enemy_lantern_wisp,Lantern Wisp,images/lantern_wisp_portrait.png,images/lantern_wisp_sprite.png,images/lantern_wisp_icon.png,3,18,0,6,1,38,0.00,slow,shock,4,item_xp_mote;item_coin_small,keep_distance_shoot,Ranged pressure enemy
-enemy_crowd_husk,Crowd Husk,images/crowd_husk_portrait.png,images/crowd_husk_sprite.png,images/crowd_husk_icon.png,3,24,0,8,1,32,0.00,shadow,explosion,5,item_xp_mote,split_on_death,Splits into weak adds
-enemy_bone_cart,Bone Cart,images/bone_cart_portrait.png,images/bone_cart_sprite.png,images/bone_cart_icon.png,4,35,0,12,3,35,0.00,knockback,slow,7,item_xp_mote;item_coin_small,charge_line,Telegraphed charge
-enemy_bell_ghast,Bell Ghast,images/bell_ghast_portrait.png,images/bell_ghast_sprite.png,images/bell_ghast_icon.png,5,1500,0,18,4,28,0.00,slow,burst,50,item_artifact_chest,boss_pursue_pulse,Five minute miniboss
